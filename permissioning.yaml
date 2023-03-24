@@ -1,0 +1,221 @@
+openapi: 3.0.3
+info:
+  title: resource permissioning service
+  termsOfService: http://swagger.io/terms/
+  version: 1.0.11
+paths:
+  /groups:
+    post:
+      tags:
+        - groups
+      summary: create an authorization group (i.e. "Corrosion Technicians")
+      responses:
+        '200':
+          description: Successful operation
+  /groups/{group_id}/resources:
+    patch:
+      tags:
+        - groups
+      summary: adds a resource to a group
+      parameters:
+        - in: path
+          name: group_id
+          schema:
+            type: string
+            format: guid
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+  /groups/{group_id}/members:
+    patch:
+      tags:
+        - groups
+      summary: adds a member to a group
+      parameters:
+        - in: path
+          name: group_id
+          schema:
+            type: string
+            format: guid
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+  /groups/{group_id}/members/{principal}/roles:
+    patch:
+      tags:
+        - groups
+      summary: adds a role to a member
+      parameters:
+        - in: path
+          name: group_id
+          schema:
+            type: string
+            format: guid
+          required: true
+        - in: path
+          name: principal
+          schema:
+            type: string
+            format: guid
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+  /roles:
+    post:
+      tags:
+        - roles
+      summary: create a role (i.e. "Corrosion Technician Manager")
+      responses:
+        '200':
+          description: Successful operation
+  /roles/{role_id}:
+    get:
+      tags:
+        - roles
+      summary: get all permissions granted to a given principal, for a specific resource type.
+      parameters:
+        - in: path
+          name: role_id
+          schema:
+            type: string
+            format: guid
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+  /principals/{principal}/permissions:
+    get:
+      tags:
+        - permissions
+      summary: get all permissions granted to a given principal
+      parameters:
+        - in: path
+          name: principal
+          schema:
+            type: string
+            format: guid
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionsResponse"
+  /principals/{principal}/permissions/{resource_type}:
+    get:
+      tags:
+        - permissions
+      summary: get all permissions granted to a given principal, for a specific resource type.
+      parameters:
+        - in: path
+          name: principal
+          schema:
+            type: string
+            format: guid
+          required: true
+        - in: path
+          name: resource_type
+          schema:
+            type: string
+            format: guid
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+  /principals/{principal}/permissions/{resource_type}/{resource_identifier}:
+    get:
+      tags:
+        - permissions
+      summary: get all permissions granted to a given principal, for a specific resource type and identifier.
+      parameters:
+        - in: path
+          name: principal
+          schema:
+            type: string
+            format: guid
+          required: true
+        - in: path
+          name: resource_type
+          schema:
+            type: string
+            format: guid
+          required: true
+        - in: path
+          name: resource_identifier
+          schema:
+            type: string
+            format: guid
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+
+  /principals/{principal}/permissions/{resource_type}/{resource_identifier}/{permission}:
+    get:
+      tags:
+        - permissions
+      summary: get a specific permission granted to a given principal, for a specific resource type and identifier
+      parameters:
+        - in: path
+          name: principal
+          schema:
+            type: string
+            format: guid
+          required: true
+        - in: path
+          name: resource_type
+          schema:
+            type: string
+            format: guid
+          required: true
+        - in: path
+          name: resource_identifier
+          schema:
+            type: string
+            format: guid
+          required: true
+        - in: path
+          name: permission
+          schema:
+            type: string
+            format: guid
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+
+components:
+  schemas:
+    Permissions:
+      type: object
+      properties:
+        resource_type:
+          type: object
+          properties:
+            identifier:
+              type: object
+            permissions:
+              type: array
+              items:
+                type: string
+      example: [ "mapgroups": [{ identifier: '384c618c-a240-44d2-ba49-f0e26765f52a', permissions: ["write:mapgroup" ]}],  "maps": [{ identifier: '384c618c-a240-44d2-ba49-f0e26765f52a', permissions: ["read:map" ]}]]
+    PermissionsResponse:
+      type: object
+      properties:
+        permissions:
+          $ref: '#/components/schemas/Permissions'
+
+
+
+
+
+
+
+
+
+
+
