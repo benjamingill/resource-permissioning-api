@@ -75,7 +75,7 @@ paths:
     get:
       tags:
         - roles
-      summary: get all permissions granted to a given principal, for a specific resource type.
+      summary: get role by id
       parameters:
         - in: path
           name: role_id
